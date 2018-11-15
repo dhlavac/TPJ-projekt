@@ -45,15 +45,15 @@ typedef struct memory_counters{
 
 extern gmemcount memtable;
 
-//prototypy
-void meminitialization(); /* inicializacia */
+//prototypes
+void meminitialization(); /* initialization */
 void* memmalloc(size_t size); /* malloc () */
 void* memrealloc(void* ptr, size_t size); /* realloc() */
 void* memcalloc(size_t num, size_t size); /* calloc() */
-void* memfopen(const char* filename, const char* mode); /* otvori subor */
-void memfree(void* ptr); /* nahrada za funkciu free() */
-void memfclose(void* ptr); /* zavrie subor */
-void memallfree(); /* vsetko uvolni */
+void* memfopen(const char* filename, const char* mode); /* open file */
+void memfree(void* ptr); /* free specific memory */
+void memfclose(void* ptr); /* close file */
+void memallfree(); /* free all memory */
 
 gmemtable* memorytablecreate();
 gmemtableitem* memtitemcreate(intptr_t key);

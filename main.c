@@ -1,15 +1,12 @@
 
 
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- 
- #include "error.h"
- #include "scaner.h"
+#include "error.h"
+#include "scaner.h"
 #include "garbage.h"
+#include "parser.h"
 
- ERROR_CODE error;
- FILE *file;
+ERROR_CODE error;
+FILE *file;
 
 const char * debug_token(int token_id){
 	switch(token_id) {
@@ -55,14 +52,16 @@ const char * debug_token(int token_id){
 
 
 int main(int argc, char **argv){
-	meminitialization();/* init garbage */
+
+	meminitialization();/* init garbage collector*/
+
 	if (argc == 1) {
 		memallfree(); /* volanie garbage aby upratal */
 		fprintf(stderr, "Subor sa netvorit.\n");
 	}
 	if(!(file = fopen(argv[1], "r"))){
-		fprintf(stderr, "Subor sa nepodarilo otvorit.\n");
-		memallfree(); /* volanie garbage aby upratal */
+		fprintf(stderr, "Cannot open file for reading.\n");
+		memallfree(); // free memorry using garbage collector
 		return INTERN_ERR;
 	}
 	while (token.id != sEndofFile){
@@ -73,8 +72,10 @@ int main(int argc, char **argv){
 			break;
 		}
 	}
+	// error = prog();
+
 	fclose(file);
 	memallfree(); /* volanie garbage aby upratal */
 
+	return error;
 }
-
