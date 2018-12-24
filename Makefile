@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -std=c11 -pedantic -W
 BIN = projekt
 RM = rm -f -v
-OBJECTS = main.o scaner.o  garbage.o #Sparser.o
+OBJECTS = main.o scaner.o garbage.o parser.o
 
 all: $(OBJECTS) error.h 
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(BIN)

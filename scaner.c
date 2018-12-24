@@ -5,22 +5,11 @@
 
 #include "scaner.h"
 
-#define NUM_OF_KEYWORDS 22	// key words number
-
 tToken token; //global variable represent token
-int row = 0;  //global variable represent actual row 
+int row = 1;  //global variable represent actual row 
+int row_tmp = 1; // temporary variable for counting rows
 char *TmpPoint; // temporary variable for storing chaacters during lexical analysys
 FILE *file;
-
-/* List of key words */
-const char *keywords[NUM_OF_KEYWORDS] = {
- 	"partitioning\0", "mount\0", "type\0", "drive\0", "device\0",
- 	"initialize\0", "config\0", "partition\0", "partitions\0", "create\0",
- 	"filesysem\0", "format\0", "partition_id\0", "partition_nr\0", "size\0",
- 	"stripes\0","stripesize\0", "lvm_group\0", "partition_id\0", "partition>_nr\0",
- 	"pesize\0", "use\0",
- 
-};
 
  /* List of key words - boolen types */
 const char *boolean_types[2] = {
@@ -57,9 +46,7 @@ static void expand_token(int c, int *i){
 * Return current character or if is character blank return to stream
 */
 static void undo_c(int c){
-	//if(!(isspace(c))){
- 		ungetc(c, file);
- 	//}
+ 	ungetc(c, file);
 }
 
 /*
@@ -68,11 +55,60 @@ static void undo_c(int c){
 static tState check_keyword(char *s){
 	int j;
 
- 	for(j = 0; j < NUM_OF_KEYWORDS; j++){
- 		if(!(strcmp(s,keywords[j]))){
- 			return sKeyWord;
- 		}
- 	}
+ 	if((strcmp(s, "partitioning")) == 0)
+ 		return K_PARTITIONING;
+ 	if((strcmp(s, "mount"))== 0)
+ 		return K_MOUNT;
+ 	if((strcmp(s, "type")) == 0)
+ 		return K_TYPE;
+ 	if((strcmp(s, "drive")) == 0)
+ 		return K_DRIVE;
+ 	if((strcmp(s, "device")) == 0)
+ 		return K_DEVICE;
+ 	if((strcmp(s, "initialize")) == 0)
+ 		return K_INITIALIZE;
+ 	if((strcmp(s, "config")) == 0)
+ 		return K_CONFIG;
+ 	if((strcmp(s, "partition")) == 0)
+ 		return K_PARTITION;
+ 	if((strcmp(s, "partitions")) == 0)
+ 		return K_PARTITIONS;
+ 	if((strcmp(s, "create")) == 0)
+ 		return K_CREATE;
+ 	if((strcmp(s, "filesystem")) == 0)
+ 		return K_FILESYSTEM;
+ 	if((strcmp(s, "format")) == 0)
+ 		return K_FORMAT;
+ 	if((strcmp(s, "partition_id")) == 0)
+ 		return K_PARTITION_ID;
+ 	if((strcmp(s, "partition_nr")) == 0)
+ 		return K_PARTITION_NR;
+ 	if((strcmp(s, "size")) == 0)
+ 		return K_SIZE;
+ 	if((strcmp(s, "stripes")) == 0)
+ 		return K_STRIPES ;
+ 	if((strcmp(s, "stripsize")) == 0)
+ 		return K_STRIPESSIZE;
+ 	if((strcmp(s, "lvm_group")) == 0)
+ 		return K_LVM_GROUP;
+ 	if((strcmp(s, "pesize")) == 0)
+ 		return K_PESIZE;
+ 	if((strcmp(s, "use")) == 0)
+ 		return K_USE;
+ 	if((strcmp(s, "all")) == 0)
+ 		return K_ALL;
+ 	if((strcmp(s, "no")) == 0)
+ 		return K_NO;
+ 	if((strcmp(s, "symbol")) == 0)
+ 		return K_SYMBOL;
+ 	if((strcmp(s, "boolean")) == 0)
+ 		return K_BOOLEAN;
+ 	if((strcmp(s, "single")) == 0)
+ 		return K_SINGLE;
+ 	if((strcmp(s, "list")) == 0)
+ 		return K_LIST;
+ 	if((strcmp(s, "integer")) == 0)
+ 		return K_INTEGER;
 
  	for(j = 0; j < 2; j++){
  		if(!(strcmp(s,boolean_types[j]))){
@@ -93,7 +129,16 @@ static tState check_keyword(char *s){
 * Add id to token depends of type of token
 */
 static void fill_token(tState state){
- 	token.id = state;
+	token.id = state;
+	if (row == row_tmp){
+		token.code_line = row;
+	}
+	else {
+		row_tmp++;
+		row = row_tmp;
+		token.code_line = row;
+	}
+ 	
 }
 
 /*
