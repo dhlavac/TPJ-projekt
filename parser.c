@@ -108,32 +108,16 @@ ERROR_CODE check(int code) {
 	}
 }
 
-// /*
-//  * Check for left >
-//  * Return: error code or ok
-//  */
-// ERROR_CODE KPartitioning() {
-// 	token = get_Token();
-// 	debug(token);
-// 	switch (token.id) {
-// 		// Lexical error
-// 		case sError: 
-// 			return LEX_ERR;
-// 		break;
-// 		// End of file
-// 		case sEndofFile: 
-// 			return SYN_ERR;
-// 		break;
-// 		// if there is "partitoining"
-// 		case  K_PARTITIONING:
-// 			return OK;
-// 		default:
-// 			return SYN_ERR;
-// 		break;
-// 	}	
-
-//   return OK;
-// }
+/*
+ * Function start syntax analysys
+ * Return: structure with error code and number of line if error occures
+ */
+tError syntax_analysys(){
+	tError error;
+	error.error_code = partitioning();
+	error.current_line = token.code_line;
+	return error;
+}
 
 /*
  * Check for left rule -> <partitioning> DRIVE_LIST </partitioning> 
@@ -397,7 +381,7 @@ ERROR_CODE ps_type() {
 		case sEndofFile: 
 			return SYN_ERR;
 		break;
-		// there is: <pesize></
+		// there is: string
 		case  sString:
 			error = OK;
 		break;
@@ -409,7 +393,7 @@ ERROR_CODE ps_type() {
 		break;
 	}
 
-	// there is: <pesize> id </
+	// there is: <ps_type> id </
 	if ((error = lEndPar()) != OK){
 		return error;
 	}
@@ -471,10 +455,11 @@ ERROR_CODE use_type() {
 		case sEndofFile: 
 			return SYN_ERR;
 		break;
-		// there is: <pesize></
+		// there is: all
 		case  K_ALL:
 			return OK;
 		break;
+		// there is no
 		case  K_NO:
 			return OK;
 		break;
@@ -699,10 +684,16 @@ ERROR_CODE partition_config() {
 		return error;
 	}
 
-	// there is: <partitions CONFIG_TYPE PARTITIONS_TYPE >  PARTITION_LIST
+	// there is: <partitions CONFIG_TYPE PARTITIONS_TYPE > PARTITION
+	if ((error = lPar()) != OK){
+		return error;
+	}
+	if ((error = partition()) != OK){
+		return error;
+	}
 
-	// there is: <partitions CONFIG_TYPE PARTITIONS_TYPE >  PARTITION_LIST </
-	if ((error = lEndPar()) != OK){
+	// there is: <partitions CONFIG_TYPE PARTITIONS_TYPE > PARTITION PARTITION_LIST or <partitions CONFIG_TYPE PARTITIONS_TYPE > PARTITION </
+	if ((error = partition_list()) != OK){
 		return error;
 	}
 
@@ -735,10 +726,11 @@ ERROR_CODE partitions_type() {
 		case sEndofFile: 
 			return SYN_ERR;
 		break;
-		// there is: <pesize></
+		// there is: single
 		case  K_SINGLE:
 			return OK;
 		break;
+		// there is: list
 		case  K_LIST:
 			return OK;
 		break;
@@ -748,7 +740,761 @@ ERROR_CODE partitions_type() {
 	}
 }
 
+/*
+ * Check for left rule -> PARTITION -> <partition> PARTITION_CREATE_CONFIG PARTITON_SIZE PARTITION_ATRIBUTES </partition> .
+ * Return: error code or ok
+ */
+ERROR_CODE partition() {
+	printf("\t\t\t\t\t----PARTITION	-----\n");
+	ERROR_CODE error = OK;
+	// there is:  <partition
+	if ((error = check(K_PARTITION)) != OK){
+		return error;
+	}
+	// there is:  <partition>
+	if ((error = rPar()) != OK){
+		return error;
+	}
 
+	// there is:<partition> PARTITION_CREATE_CONFIG
+	if ((error = lPar()) != OK){
+		return error;
+	}
+	if ((error = partition_create_config()) != OK){
+		return error;
+	}
+
+	// there is:<partition> PARTITION_CREATE_CONFIG PARTITON_SIZE
+	if ((error = lPar()) != OK){
+		return error;
+	}
+	if ((error = partition_size()) != OK){
+		return error;
+	}
+
+	// there is:<partition> PARTITION_CREATE_CONFIG PARTITON_SIZE PARTITION_ATRIBUTES 
+	if ((error = partition_atributes()) != OK){
+		return error;
+	}
+
+	// there is: <partition> PARTITION_CREATE_CONFIG PARTITON_SIZE PARTITION_ATRIBUTES </partition
+	if ((error = check(K_PARTITION)) != OK){
+		return error;
+	}
+	// there is: <partition> PARTITION_CREATE_CONFIG PARTITON_SIZE PARTITION_ATRIBUTES </partition>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule -> PARTITION_LIST -> PARTITION PARTITION_LIST  or PARTITION_LIST -> .
+ * Return: error code or ok
+ */
+ERROR_CODE partition_list() {
+	printf("\t\t\t\t\t----PARTITION_LIST	-----\n");
+	ERROR_CODE error = OK;
+
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: <
+		case  sLStartPar:
+			if ((error = partition()) != OK){
+				return error;
+			}
+		break;
+		// there is: </
+		case  sLEndPar:
+			return OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+	if ((error = partition_list()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule ->  PARTITION_CREATE_CONFIG -> <create CONFIG_TYPE boolean > BOOLEAN </create> .
+ * Return: error code or ok
+ */
+ERROR_CODE partition_create_config() {
+	printf("\t\t\t\t\t----PARTITION_CREATE_CONFIG	-----\n");
+	ERROR_CODE error = OK;
+	// there is: <create
+	if ((error = check(K_CREATE)) != OK){
+		return error;
+	}
+	// there is:<create CONFIG_TYPE
+	if ((error = config_type()) != OK){
+		return error;
+	}
+
+	// there is: <create CONFIG_TYPE boolean
+	if ((error = check(K_BOOLEAN)) != OK){
+		return error;
+	}
+
+	// there is: <create CONFIG_TYPE boolean >
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	// there is: <create CONFIG_TYPE boolean > BOOLEAN
+	if ((error = boolean()) != OK){
+		return error;
+	}
+
+	// there is: <create CONFIG_TYPE boolean > BOOLEAN </
+	if ((error = lEndPar()) != OK){
+		return error;
+	}
+
+
+	// there is: <create CONFIG_TYPE boolean > BOOLEAN </create
+	if ((error = check(K_CREATE)) != OK){
+		return error;
+	}
+	// there is: <create CONFIG_TYPE boolean > BOOLEAN </create>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule -> PARTITON_SIZE -> <size> id </size> .
+ * Return: error code or ok
+ */
+ERROR_CODE partition_size() {
+	printf("\t\t\t\t\t----PARTITION_SIZE	-----\n");
+	ERROR_CODE error = OK;
+	// there is: <size 
+	if ((error = check(K_SIZE)) != OK){
+		return error;
+	}
+	// there is: <size>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	// there is: <size> id 
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: symbol
+		case  sString:
+			error = OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	// there is: <size> id </
+	if ((error = lEndPar()) != OK){
+		return error;
+	}
+	// there is: <size> id </size
+	if ((error = check(K_SIZE)) != OK){
+		return error;
+	}
+	// there is:<size> id </size> 
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule -> PARTITION_MOUNT -> <mount> id </mount> .
+ * Return: error code or ok
+ */
+ERROR_CODE mount() {
+	ERROR_CODE error = OK;
+	printf("\t\t\t\t\t----MOUNT	-----\n");
+	// there is: <mount>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	// there is: <mount> id 
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: string
+		case  sString:
+			error = OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	// there is: <mount> id </
+	if ((error = lEndPar()) != OK){
+		return error;
+	}
+	// there is: <mount> id </mount
+	if ((error = check(K_MOUNT)) != OK){
+		return error;
+	}
+	// there is: <mount> id </mount>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule -> LV_NAME -> <lv_name> id </lv_name> .
+ * Return: error code or ok
+ */
+ERROR_CODE lv_name() {
+	ERROR_CODE error = OK;
+	printf("\t\t\t\t\t----LV_NAME	-----\n");
+	// there is: <lv_name>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	// there is: <lv_name> id
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: string
+		case  sString:
+			error = OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	// there is: <lv_name> id </
+	if ((error = lEndPar()) != OK){
+		return error;
+	}
+	// there is: <lv_name> id </lv_name
+	if ((error = check(K_LV_NAME)) != OK){
+		return error;
+	}
+	// there is: <lv_name> id </lv_name>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule -> LVM_GROUP -> <lvm_group> id </lvm_group> .
+ * Return: error code or ok
+ */
+ERROR_CODE lvm_group() {
+	ERROR_CODE error = OK;
+	printf("\t\t\t\t\t----LVM_GROUP	-----\n");
+	// there is: <lvm_group>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	// there is: <lvm_group> id
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: string
+		case  sString:
+			error = OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	// there is: <lvm_group> id </
+	if ((error = lEndPar()) != OK){
+		return error;
+	}
+	// there is: <lvm_group> id </lvm_group
+	if ((error = check(K_LVM_GROUP)) != OK){
+		return error;
+	}
+	// there is: <lvm_group> id </lvm_group>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+
+/*
+ * Check for left rule ->  PARTITON_ID -> <partition_id  CONFIG_TYPE ATRIBUTE_TYPE > id </partition_id> .
+ * Return: error code or ok
+ */
+ERROR_CODE partition_id() {
+	printf("\t\t\t\t\t----PARTITION_ID	-----\n");
+	ERROR_CODE error = OK;
+	// there is: <partition_id  CONFIG_TYPE
+	if ((error = config_type()) != OK){
+		return error;
+	}
+	// there is: <partition_id  CONFIG_TYPE ATRIBUTE_TYPE
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: symbol
+		case  K_SYMBOL:
+			error = OK;
+		break;
+		// there is: integer
+		case  K_INTEGER:
+			error = OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	// there is: <partition_id  CONFIG_TYPE ATRIBUTE_TYPE >
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	// there is: <partition_id  CONFIG_TYPE ATRIBUTE_TYPE> id
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: symbol
+		case  sString:
+			error = OK;
+		break;
+		// there is: integer
+		case  sInteger:
+			error = OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	// there is: <partition_id  CONFIG_TYPE ATRIBUTE_TYPE > id </
+	if ((error = lEndPar()) != OK){
+		return error;
+	}
+
+
+	// there is: <partition_id  CONFIG_TYPE ATRIBUTE_TYPE > id </partition_id
+	if ((error = check(K_PARTITION_ID)) != OK){
+		return error;
+	}
+	// there is: <partition_id  CONFIG_TYPE ATRIBUTE_TYPE > id </partition_id> 
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule ->  PARTITON_NR -> <partition_nr  CONFIG_TYPE integer > id </partition_nr> .
+ * Return: error code or ok
+ */
+ERROR_CODE partition_nr() {
+	printf("\t\t\t\t\t----PARTITION_NR	-----\n");
+	ERROR_CODE error = OK;
+	// there is: <partition_nr  CONFIG_TYPE
+	if ((error = config_type()) != OK){
+		return error;
+	}
+	// there is: <partition_nr CONFIG_TYPE integer
+	if ((error = check(K_INTEGER)) != OK){
+		return error;
+	}
+
+	// there is: <partition_nr  CONFIG_TYPE integer >
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	// there is: <partition_nr  CONFIG_TYPE integer> id
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: integer
+		case  sInteger:
+			error = OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	// there is: <partition_nr  CONFIG_TYPE integer > id </
+	if ((error = lEndPar()) != OK){
+		return error;
+	}
+
+
+	// there is: <partition_nr  CONFIG_TYPE integer > id </partition_nr
+	if ((error = check(K_PARTITION_NR)) != OK){
+		return error;
+	}
+	// there is: <partition_nr  CONFIG_TYPE integer > id </partition_nr> 
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule -> PARTITION_ATRIBUTES -> PARTITION_FORMAT or PARTITION_MOUNT or LV_NAME or PARTITION_NR or LVM_GROUP or PARTITION_ID or STRIPES or PARTITION_FS or .
+ * Return: error code or ok
+ */
+ERROR_CODE partition_atributes() {
+	printf("\t\t\t\t\t----PARTITION_ATRIBUTES	-----\n");
+	ERROR_CODE error = OK;
+	// there is: < or </
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: <
+		case  sLStartPar:
+			error = OK;
+		break;
+		// there is: </
+		case  sLEndPar:
+			return OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+	// there is: filesystem or mount or lv_name or lvm_group or stripes or format or partition_id or partition_nr
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: filsystem
+		case  K_FILESYSTEM:
+			if ((error = filesystem()) != OK){
+				return error;
+			}
+		break;
+		// there is: mount
+		case  K_MOUNT:
+			if ((error = mount()) != OK){
+				return error;
+			}
+		break;
+		// there is: lv_name
+		case  K_LV_NAME:
+			if ((error = lv_name()) != OK){
+				return error;
+			}
+		break;
+		// there is: lvm_group
+		case  K_LVM_GROUP:
+			if ((error = lvm_group()) != OK){
+				return error;
+			}
+		break;
+		// there is: stripes
+		case  K_STRIPES:
+			if ((error = stripes()) != OK){
+				return error;
+			}
+		break;
+		// there is: format
+		case  K_FORMAT:
+			if ((error = format()) != OK){
+				return error;
+			}
+		break;
+		// there is: partition_id
+		case  K_PARTITION_ID:
+			if ((error = partition_id()) != OK){
+				return error;
+			}
+		break;
+		// there is: partition_nr
+		case  K_PARTITION_NR:
+			if ((error = partition_nr()) != OK){
+				return error;
+			}
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	if ((error = partition_atributes()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule ->  PARTITION_FORMAT -> <format CONFIG_TYPE boolean > BOOLEAN </format> .
+ * Return: error code or ok
+ */
+ERROR_CODE format() {
+	printf("\t\t\t\t\t----FORMAT	-----\n");
+	ERROR_CODE error = OK;
+	// there is: <format CONFIG_TYPE
+	if ((error = config_type()) != OK){
+		return error;
+	}
+	// there is: <format CONFIG_TYPE boolean
+	if ((error = check(K_BOOLEAN)) != OK){
+		return error;
+	}
+
+	// there is: <format CONFIG_TYPE boolean >
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	// there is: <format CONFIG_TYPE boolean > BOOLEAN
+	if ((error = boolean()) != OK){
+		return error;
+	}
+
+	// there is: <format CONFIG_TYPE boolean > BOOLEAN </
+	if ((error = lEndPar()) != OK){
+		return error;
+	}
+
+
+	// there is: <format CONFIG_TYPE boolean > BOOLEAN </format
+	if ((error = check(K_FORMAT)) != OK){
+		return error;
+	}
+	// there is: <format CONFIG_TYPE boolean > BOOLEAN </format>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule ->  STRIPES ->  <stripes CONFIG_TYPE ATRIBUTE_TYPE > id </stripes> .
+ * Return: error code or ok
+ */
+ERROR_CODE stripes() {
+	printf("\t\t\t\t\t----STRIPES	-----\n");
+	ERROR_CODE error = OK;
+	// there is: <stripes CONFIG_TYPE
+	if ((error = config_type()) != OK){
+		return error;
+	}
+	// there is: <stripes CONFIG_TYPE ATRIBUTE_TYPE >
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: symbol
+		case  K_SYMBOL:
+			error = OK;
+		break;
+		// there is: integer
+		case  K_INTEGER:
+			error = OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	// there is: <stripes CONFIG_TYPE ATRIBUTE_TYPE >
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	// there is: <stripes CONFIG_TYPE ATRIBUTE_TYPE > id
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: symbol
+		case  sString:
+			error = OK;
+		break;
+		// there is: integer
+		case  sInteger:
+			error = OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	// there is: <stripes CONFIG_TYPE ATRIBUTE_TYPE > id </
+	if ((error = lEndPar()) != OK){
+		return error;
+	}
+
+
+	// there is: <stripes CONFIG_TYPE ATRIBUTE_TYPE > id </stripes
+	if ((error = check(K_STRIPES)) != OK){
+		return error;
+	}
+	// there is: <stripes CONFIG_TYPE ATRIBUTE_TYPE > id </stripes>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
+
+/*
+ * Check for left rule ->  PARTITION_FS -> <filesystem CONFIG_TYPE symbol> id </filesystem> .
+ * Return: error code or ok
+ */
+ERROR_CODE filesystem() {
+	printf("\t\t\t\t\t----FILESYSTEM	-----\n");
+	ERROR_CODE error = OK;
+	// there is: <filesystem CONFIG_TYPE
+	if ((error = config_type()) != OK){
+		return error;
+	}
+
+	// there is: <filesystem CONFIG_TYPE symbol
+	if ((error = check(K_SYMBOL)) != OK){
+		return error;
+	}
+
+	// there is: <filesystem CONFIG_TYPE symbol>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+
+	// there is: <filesystem CONFIG_TYPE symbol> id
+	token = get_Token();
+	debug(token);
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: string
+		case  sString:
+			error =  OK;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	if (error != OK){
+		return error;
+	}
+
+	// there is:<filesystem CONFIG_TYPE symbol> id </
+	if ((error = lEndPar()) != OK){
+		return error;
+	}
+
+	// there is: <filesystem CONFIG_TYPE symbol> id </filesystem
+	if ((error = check(K_FILESYSTEM)) != OK){
+		return error;
+	}
+	// there is: <filesystem CONFIG_TYPE symbol> id </filesystem>
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	return OK;
+}
 
 
 const char * debug_token(int token_id){
@@ -785,9 +1531,6 @@ const char * debug_token(int token_id){
 		  break;
 		case sKeyWord  :
 		  return "---Klucove slovo";
-		  break;
-		case sTypes  :
-		  return "---Typ";
 		  break;
 		case K_PARTITIONING  :
 		  return "---KPartitioning";

@@ -27,11 +27,11 @@ typedef enum{
 	sKeyWord,			// 13 - Key words
 	sError,				// 14 - Lexical error
 	sEnd, 				// 15 - End state
-	sEscSeq,			// 16 - Escape sequestion
-	sTypes				// 17 - Type - list symbol boolean 
+	sEscSeq				// 16 - Escape sequestion
 } tState;
 
 /*Keywords*/
+#define K_LV_NAME 17			// lv_name
 #define K_PARTITIONING 18		// partitioning
 #define K_MOUNT 19				// mount
 #define K_TYPE 20				// type

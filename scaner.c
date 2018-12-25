@@ -16,11 +16,6 @@ const char *boolean_types[2] = {
  	"true\0", "false\0",
 };
 
- /* List of key words -  types */
-const char *types[4] = {
- 	"list\0", "symbol\0" ,"integer\0", "boolean\0",
-};
-
 /*
 * Memory realocation for readen characters
 * Using garbage collector to prevent memory loose
@@ -109,16 +104,12 @@ static tState check_keyword(char *s){
  		return K_LIST;
  	if((strcmp(s, "integer")) == 0)
  		return K_INTEGER;
+ 	if((strcmp(s, "lv_name")) == 0)
+ 		return K_LV_NAME;
 
  	for(j = 0; j < 2; j++){
  		if(!(strcmp(s,boolean_types[j]))){
  			return sBooleanType;
- 		}
- 	}
-
- 	for(j = 0; j < 2; j++){
- 		if(!(strcmp(s,types[j]))){
- 			return sTypes;
  		}
  	}
 
