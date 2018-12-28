@@ -1,10 +1,15 @@
+/*
+ * File: garbage.c 
+ * Description: Modification of functions for alocation and dealocation of memory 
+ */
+
 #include "garbage.h"
 
+// table with data of alocations ad frees
 gmemcount memtable;
 
-void meminitialization() {
-	
 
+void meminitialization() {
     memtable.mallocs = 0;
     memtable.reallocs = 0;
     memtable.callocs = 0;
@@ -20,7 +25,6 @@ void meminitialization() {
 }
 
 void* memmalloc(size_t size) {
-
 	memtable.mallocs++;
 	memtable.allocated  += size;
 
@@ -42,7 +46,6 @@ void* memmalloc(size_t size) {
 }	
 
 void* memrealloc(void* ptr, size_t size){
-
     memtable.reallocs++;
     memtable.allocated = memtable.allocated + size;
 
@@ -130,13 +133,15 @@ void memfree(void* ptr){
 void memfclose(void* ptr){
     memtable.fcloses++;
 
-    if(!ptr)
+    if(!ptr){
         return;
+    }
 
     gmemtableitem* item = memfindout(memtable.table, (intptr_t)ptr);
 
-    if(!item)
+    if(!item){
         return;
+    }
 
     if(item->allocated != 0){
         fclose(ptr);

@@ -5,13 +5,17 @@
 
 #include "parser.h"
 
+// structure for detecting semantic errors
+tPartAtrNumber occurance;
+// number of partitions in config - used for semantic analysys
+int partitions_number;
+int partitions_config_type;
 /*
  * Check for left <
  * Return: error code or ok
  */
 ERROR_CODE lPar() {
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -38,7 +42,6 @@ ERROR_CODE lPar() {
  */
 ERROR_CODE lEndPar() {
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -65,7 +68,6 @@ ERROR_CODE lEndPar() {
  */
 ERROR_CODE rPar() {
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -93,7 +95,6 @@ ERROR_CODE rPar() {
 
 ERROR_CODE check(int code) {
 	token = get_Token();
-	debug(token);
 	if (token.id == sError){
 		return LEX_ERR;
 	}
@@ -138,7 +139,6 @@ ERROR_CODE partitioning() {
 	}
 
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -182,7 +182,6 @@ ERROR_CODE partitioning() {
 	}
 
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -277,7 +276,6 @@ ERROR_CODE drive_list() {
 	}
 	
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -322,9 +320,8 @@ ERROR_CODE device() {
 	if ((error = rPar()) != OK){
 		return error;
 	}
-
+	// there is: <device> id 
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -336,7 +333,9 @@ ERROR_CODE device() {
 		break;
 		// there is: identificator
 		case  sString:
-			error = OK;
+			if ((error = check_path(token.attribute)) != OK){
+				return error;
+			}
 		break;
 		default:
 			return SYN_ERR;
@@ -371,7 +370,6 @@ ERROR_CODE ps_type() {
 	ERROR_CODE error = OK;
 
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -445,7 +443,6 @@ ERROR_CODE use_type() {
 	printf("\t\t\t\t\t----USE_TYPE	-----\n");
 	// there is: all or no
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -590,7 +587,6 @@ ERROR_CODE boolean() {
 	return OK;
 }
 
-
 /*
  * Check for left rule ->  PARTITION_TYPE -> <type CONFIG_TYPE symbol> id </type> .
  * Return: error code or ok
@@ -608,8 +604,27 @@ ERROR_CODE partition_type() {
 	}
 
 	// there is: <type CONFIG_TYPE symbol
-	if ((error = check(K_SYMBOL)) != OK){
-		return error;
+	token = get_Token();
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: string
+		case  K_SYMBOL:
+			error =  OK;
+		break;
+		case K_INTEGER:
+		case K_BOOLEAN:
+			return SEM_ERR;
+		break;
+		default:
+			return SYN_ERR;
+		break;
 	}
 
 	// there is: <type CONFIG_TYPE symbol>
@@ -619,7 +634,6 @@ ERROR_CODE partition_type() {
 
 	// there is: <type CONFIG_TYPE symbol> id
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -663,6 +677,8 @@ ERROR_CODE partition_type() {
  * Return: error code or ok
  */
 ERROR_CODE partition_config() {
+	// set number of partittions to zero
+	partitions_number = 0;
 	printf("\t\t\t\t\t----PARTITION_CONFIG	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <partitions
@@ -705,6 +721,11 @@ ERROR_CODE partition_config() {
 	if ((error = rPar()) != OK){
 		return error;
 	}
+	// semantic analysys for number of declared partitions
+	if ((partitions_config_type == SINGLE) && (partitions_number > 1)){
+		return SEM_SINGLE_LIST_ERR;
+	}
+
 	return OK;
 }
 
@@ -716,7 +737,6 @@ ERROR_CODE partitions_type() {
 	printf("\t\t\t\t\t----PARTITIONS_TYPE	-----\n");
 	// there is: list or single
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -728,10 +748,12 @@ ERROR_CODE partitions_type() {
 		break;
 		// there is: single
 		case  K_SINGLE:
+			partitions_config_type = SINGLE;
 			return OK;
 		break;
 		// there is: list
 		case  K_LIST:
+			partitions_config_type = LIST;
 			return OK;
 		break;
 		default:
@@ -745,6 +767,10 @@ ERROR_CODE partitions_type() {
  * Return: error code or ok
  */
 ERROR_CODE partition() {
+	// set partitions atribute occurance to zero - semantic analysys
+	occurance = set_zero_counter(occurance);
+	// increment number of partitions or semantic analysys
+	partitions_number++;
 	printf("\t\t\t\t\t----PARTITION	-----\n");
 	ERROR_CODE error = OK;
 	// there is:  <partition
@@ -797,7 +823,6 @@ ERROR_CODE partition_list() {
 	ERROR_CODE error = OK;
 
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -844,8 +869,27 @@ ERROR_CODE partition_create_config() {
 	}
 
 	// there is: <create CONFIG_TYPE boolean
-	if ((error = check(K_BOOLEAN)) != OK){
-		return error;
+	token = get_Token();
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: string
+		case  K_BOOLEAN:
+			error =  OK;
+		break;
+		case K_INTEGER:
+		case K_SYMBOL:
+			return SEM_ERR;
+		break;
+		default:
+			return SYN_ERR;
+		break;
 	}
 
 	// there is: <create CONFIG_TYPE boolean >
@@ -891,7 +935,6 @@ ERROR_CODE partition_size() {
 	}
 	// there is: <size> id 
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -938,7 +981,6 @@ ERROR_CODE mount() {
 	}
 	// there is: <mount> id 
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -950,7 +992,9 @@ ERROR_CODE mount() {
 		break;
 		// there is: string
 		case  sString:
-			error = OK;
+			if ((error = check_path(token.attribute)) != OK){
+				return error;
+			}
 		break;
 		default:
 			return SYN_ERR;
@@ -985,7 +1029,6 @@ ERROR_CODE lv_name() {
 	}
 	// there is: <lv_name> id
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -1032,7 +1075,6 @@ ERROR_CODE lvm_group() {
 	}
 	// there is: <lvm_group> id
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -1041,6 +1083,10 @@ ERROR_CODE lvm_group() {
 		// End of file
 		case sEndofFile: 
 			return SYN_ERR;
+		break;
+		case sInteger:
+		case sBooleanType:
+			return SEM_ERR;
 		break;
 		// there is: string
 		case  sString:
@@ -1072,15 +1118,14 @@ ERROR_CODE lvm_group() {
  * Return: error code or ok
  */
 ERROR_CODE partition_id() {
-	printf("\t\t\t\t\t----PARTITION_ID	-----\n");
 	ERROR_CODE error = OK;
+	int tmp_attr_type;
 	// there is: <partition_id  CONFIG_TYPE
 	if ((error = config_type()) != OK){
 		return error;
 	}
 	// there is: <partition_id  CONFIG_TYPE ATRIBUTE_TYPE
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -1092,10 +1137,12 @@ ERROR_CODE partition_id() {
 		break;
 		// there is: symbol
 		case  K_SYMBOL:
+			tmp_attr_type = K_SYMBOL;
 			error = OK;
 		break;
 		// there is: integer
 		case  K_INTEGER:
+			tmp_attr_type = K_INTEGER;
 			error = OK;
 		break;
 		default:
@@ -1109,7 +1156,6 @@ ERROR_CODE partition_id() {
 	}
 	// there is: <partition_id  CONFIG_TYPE ATRIBUTE_TYPE> id
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -1121,12 +1167,23 @@ ERROR_CODE partition_id() {
 		break;
 		// there is: symbol
 		case  sString:
+			if (tmp_attr_type == K_INTEGER){
+				return SEM_ERR;
+			}
 			error = OK;
 		break;
 		// there is: integer
 		case  sInteger:
+			if (tmp_attr_type == K_SYMBOL){
+				return SEM_ERR;
+			}
 			error = OK;
 		break;
+		// wrong types
+		case sIdent:
+		case sBooleanType:
+			return SEM_ERR;
+		break;	
 		default:
 			return SYN_ERR;
 		break;
@@ -1161,17 +1218,7 @@ ERROR_CODE partition_nr() {
 		return error;
 	}
 	// there is: <partition_nr CONFIG_TYPE integer
-	if ((error = check(K_INTEGER)) != OK){
-		return error;
-	}
-
-	// there is: <partition_nr  CONFIG_TYPE integer >
-	if ((error = rPar()) != OK){
-		return error;
-	}
-	// there is: <partition_nr  CONFIG_TYPE integer> id
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -1181,6 +1228,39 @@ ERROR_CODE partition_nr() {
 		case sEndofFile: 
 			return SYN_ERR;
 		break;
+		// there is: string
+		case  K_INTEGER:
+			error =  OK;
+		break;
+		case K_SYMBOL:
+		case K_BOOLEAN:
+			return SEM_ERR;
+		break;
+		default:
+			return SYN_ERR;
+		break;
+	}
+
+	// there is: <partition_nr  CONFIG_TYPE integer >
+	if ((error = rPar()) != OK){
+		return error;
+	}
+	// there is: <partition_nr  CONFIG_TYPE integer> id
+	token = get_Token();
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		case sString:
+		case sBooleanType:
+		case sIdent:
+			return SEM_ERR;
+		break;	
 		// there is: integer
 		case  sInteger:
 			error = OK;
@@ -1216,7 +1296,6 @@ ERROR_CODE partition_atributes() {
 	ERROR_CODE error = OK;
 	// there is: < or </
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -1240,7 +1319,6 @@ ERROR_CODE partition_atributes() {
 	}
 	// there is: filesystem or mount or lv_name or lvm_group or stripes or format or partition_id or partition_nr
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -1252,48 +1330,56 @@ ERROR_CODE partition_atributes() {
 		break;
 		// there is: filsystem
 		case  K_FILESYSTEM:
+			occurance.partition_fs_counter++;
 			if ((error = filesystem()) != OK){
 				return error;
 			}
 		break;
 		// there is: mount
 		case  K_MOUNT:
+			occurance.partition_mount_counter++;
 			if ((error = mount()) != OK){
 				return error;
 			}
 		break;
 		// there is: lv_name
 		case  K_LV_NAME:
+			occurance.lv_name_counter++;
 			if ((error = lv_name()) != OK){
 				return error;
 			}
 		break;
 		// there is: lvm_group
 		case  K_LVM_GROUP:
+			occurance.lvm_group_counter++;
 			if ((error = lvm_group()) != OK){
 				return error;
 			}
 		break;
 		// there is: stripes
 		case  K_STRIPES:
+			occurance.stripes_counter++;
 			if ((error = stripes()) != OK){
 				return error;
 			}
 		break;
 		// there is: format
 		case  K_FORMAT:
+			occurance.partition_format_counter++;
 			if ((error = format()) != OK){
 				return error;
 			}
 		break;
 		// there is: partition_id
 		case  K_PARTITION_ID:
+			occurance.partition_id_counter++;
 			if ((error = partition_id()) != OK){
 				return error;
 			}
 		break;
 		// there is: partition_nr
 		case  K_PARTITION_NR:
+			occurance.partition_nr_counter++;
 			if ((error = partition_nr()) != OK){
 				return error;
 			}
@@ -1301,6 +1387,9 @@ ERROR_CODE partition_atributes() {
 		default:
 			return SYN_ERR;
 		break;
+	}
+	if ((error = check_multiple_occurance(occurance)) != OK){
+		return error;
 	}
 
 	if ((error = partition_atributes()) != OK){
@@ -1321,8 +1410,27 @@ ERROR_CODE format() {
 		return error;
 	}
 	// there is: <format CONFIG_TYPE boolean
-	if ((error = check(K_BOOLEAN)) != OK){
-		return error;
+	token = get_Token();
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: string
+		case  K_BOOLEAN:
+			error =  OK;
+		break;
+		case K_INTEGER:
+		case K_SYMBOL:
+			return SEM_ERR;
+		break;
+		default:
+			return SYN_ERR;
+		break;
 	}
 
 	// there is: <format CONFIG_TYPE boolean >
@@ -1358,13 +1466,13 @@ ERROR_CODE format() {
 ERROR_CODE stripes() {
 	printf("\t\t\t\t\t----STRIPES	-----\n");
 	ERROR_CODE error = OK;
+	int tmp_attr_type;
 	// there is: <stripes CONFIG_TYPE
 	if ((error = config_type()) != OK){
 		return error;
 	}
 	// there is: <stripes CONFIG_TYPE ATRIBUTE_TYPE >
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -1376,10 +1484,12 @@ ERROR_CODE stripes() {
 		break;
 		// there is: symbol
 		case  K_SYMBOL:
+			tmp_attr_type = K_SYMBOL;
 			error = OK;
 		break;
 		// there is: integer
 		case  K_INTEGER:
+			tmp_attr_type = K_INTEGER;
 			error = OK;
 		break;
 		default:
@@ -1393,7 +1503,6 @@ ERROR_CODE stripes() {
 	}
 	// there is: <stripes CONFIG_TYPE ATRIBUTE_TYPE > id
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -1405,10 +1514,17 @@ ERROR_CODE stripes() {
 		break;
 		// there is: symbol
 		case  sString:
+			// semantic control
+			if (tmp_attr_type == K_INTEGER){
+				return SEM_ERR;
+			}
 			error = OK;
 		break;
 		// there is: integer
 		case  sInteger:
+			if (tmp_attr_type == K_SYMBOL){
+				return SEM_ERR;
+			}
 			error = OK;
 		break;
 		default:
@@ -1446,8 +1562,27 @@ ERROR_CODE filesystem() {
 	}
 
 	// there is: <filesystem CONFIG_TYPE symbol
-	if ((error = check(K_SYMBOL)) != OK){
-		return error;
+	token = get_Token();
+	switch (token.id) {
+		// Lexical error
+		case sError: 
+			return LEX_ERR;
+		break;
+		// End of file
+		case sEndofFile: 
+			return SYN_ERR;
+		break;
+		// there is: string
+		case  K_SYMBOL:
+			error =  OK;
+		break;
+		case K_INTEGER:
+		case K_BOOLEAN:
+			return SEM_ERR;
+		break;
+		default:
+			return SYN_ERR;
+		break;
 	}
 
 	// there is: <filesystem CONFIG_TYPE symbol>
@@ -1457,7 +1592,6 @@ ERROR_CODE filesystem() {
 
 	// there is: <filesystem CONFIG_TYPE symbol> id
 	token = get_Token();
-	debug(token);
 	switch (token.id) {
 		// Lexical error
 		case sError: 
@@ -1466,6 +1600,11 @@ ERROR_CODE filesystem() {
 		// End of file
 		case sEndofFile: 
 			return SYN_ERR;
+		break;
+		case sInteger:
+		case sIdent:
+		case sBooleanType:
+			return SEM_ERR;
 		break;
 		// there is: string
 		case  sString:

@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "semantic.h"
 #include "error.h"
 #include "scaner.h"
 
@@ -21,6 +22,7 @@ typedef struct{
 tError syntax_analysys();
 ERROR_CODE partitioning();
 void debug();
+ERROR_CODE check();
 ERROR_CODE rPar();
 ERROR_CODE lPar();
 ERROR_CODE KPartitioning();

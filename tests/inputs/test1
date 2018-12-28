@@ -26,7 +26,7 @@
         </partition>
 			</partitions>
 			<pesize></pesize>
-			<type config:type=symbol>"nieco ine"</type>
+			<type config:type=symbol>"HIGH_DATA"</type>
 			<use>all</use>
 		</drive>
 		<drive>
@@ -49,7 +49,7 @@
 		<drive>
 			<device>"/dev/sda"</device>
 			<initialize config:type=boolean>true</initialize>
-			<partitions config:type=list>
+			<partitions config:type=single>
 				<partition>
 					<create config:type=boolean>false</create>
 					<size>""</size>

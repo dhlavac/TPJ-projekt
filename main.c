@@ -1,9 +1,13 @@
-
+/*
+ * File: main.c 
+ * Description: Main file of program for porcessing configuration files for Foreman disc configuration tool
+ */
 
 #include "error.h"
 #include "scaner.h"
 #include "garbage.h"
 #include "parser.h"
+#include "semantic.h"
 
 tError error;
 FILE *file;
@@ -39,6 +43,19 @@ int main(int argc, char **argv){
 			// Semantic error
 			case  SEM_ERR:
 				fprintf(stderr, "Semantic error occures on line %d\n",error.current_line);
+			break;
+			// Semantic error with multiple definition
+			case  SEM_DOUBLE_DEF_ERR:
+				fprintf(stderr, "Semantic error occures on line %d  - multiple times atribute definition\n",error.current_line);
+			break;
+			// Semantic error with multiple definition
+			case  SEM_INVALID_PATH_ERR:
+				fprintf(stderr, "Semantic error occures on line %d  - string must be path e.g. /example/other\n",error.current_line);
+			break;
+			// Semantic error - wrong definition of list/single partitions
+			case  SEM_SINGLE_LIST_ERR:
+				fprintf(stderr, "Semantic error occures in partitions block ended on line %d - declared \
+					 single in partitions config but used list - too much partitions in block.\n", error.current_line);
 			break;
 			// Internal error
 			case  INTERN_ERR:

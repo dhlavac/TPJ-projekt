@@ -1,4 +1,7 @@
- 
+/*
+ * File: garbage.h 
+ * Description: Header file of garbage collector
+ */ 
 #ifndef GARBAGE_INCLUDED
 #define GARBAGE_INCLUDED
 
