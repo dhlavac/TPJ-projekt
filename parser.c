@@ -125,7 +125,6 @@ tError syntax_analysys(){
  * Return: error code or ok
  */
 ERROR_CODE partitioning() {
-	printf("\t\t\t\t\t----PARTITIONING-----\n");
 	ERROR_CODE error = OK;
 	if ((error = lPar()) != OK)
 		return error;
@@ -203,7 +202,6 @@ ERROR_CODE partitioning() {
  * Return: error code or ok
  */
 ERROR_CODE drive_list() {
-	printf("\t\t\t\t\t----DRIVE_LIST	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <drive
 	if ((error = check(K_DRIVE)) != OK){
@@ -310,7 +308,6 @@ ERROR_CODE drive_list() {
  * Return: error code or ok
  */
 ERROR_CODE device() {
-	printf("\t\t\t\t\t----DEVICE	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <device
 	if ((error = check(K_DEVICE)) != OK){
@@ -366,7 +363,6 @@ ERROR_CODE device() {
  * Return: error code or ok
  */
 ERROR_CODE ps_type() {
-	printf("\t\t\t\t\t----PS_TYPE	-----\n");
 	ERROR_CODE error = OK;
 
 	token = get_Token();
@@ -404,7 +400,6 @@ ERROR_CODE ps_type() {
  * Return: error code or ok
  */
 ERROR_CODE use() {
-	printf("\t\t\t\t\t----USE	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <use
 	if ((error = check(K_USE)) != OK){
@@ -440,7 +435,6 @@ ERROR_CODE use() {
  * Return: error code or ok
  */
 ERROR_CODE use_type() {
-	printf("\t\t\t\t\t----USE_TYPE	-----\n");
 	// there is: all or no
 	token = get_Token();
 	switch (token.id) {
@@ -472,7 +466,6 @@ ERROR_CODE use_type() {
  * Return: error code or ok
  */
 ERROR_CODE pesize() {
-	printf("\t\t\t\t\t----PESIZE	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <pesize
 	if ((error = check(K_PESIZE)) != OK){
@@ -502,7 +495,6 @@ ERROR_CODE pesize() {
  * Return: error code or ok
  */
 ERROR_CODE initialize() {
-	printf("\t\t\t\t\t----INITIALIZE	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <initialize
 	if ((error = check(K_INITIALIZE)) != OK){
@@ -551,7 +543,6 @@ ERROR_CODE initialize() {
  * Return: error code or ok
  */
 ERROR_CODE config_type() {
-	printf("\t\t\t\t\t----CONFIG_TYPE	-----\n");
 	ERROR_CODE error = OK;
 	// there is: config
 	if ((error = check(K_CONFIG)) != OK){
@@ -572,13 +563,11 @@ ERROR_CODE config_type() {
 	return OK;
 }
 
-
 /*
  * Check for left rule ->  BOOLEAN -> true or false
  * Return: error code or ok
  */
 ERROR_CODE boolean() {
-	printf("\t\t\t\t\t----BOOLEAN	-----\n");
 	ERROR_CODE error = OK;
 	// there is: true/false
 	if ((error = check(sBooleanType)) != OK){
@@ -592,7 +581,6 @@ ERROR_CODE boolean() {
  * Return: error code or ok
  */
 ERROR_CODE partition_type() {
-	printf("\t\t\t\t\t----PARTITION_TYPE	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <type
 	if ((error = check(K_TYPE)) != OK){
@@ -679,7 +667,6 @@ ERROR_CODE partition_type() {
 ERROR_CODE partition_config() {
 	// set number of partittions to zero
 	partitions_number = 0;
-	printf("\t\t\t\t\t----PARTITION_CONFIG	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <partitions
 	if ((error = check(K_PARTITIONS)) != OK){
@@ -734,7 +721,6 @@ ERROR_CODE partition_config() {
  * Return: error code or ok
  */
 ERROR_CODE partitions_type() {
-	printf("\t\t\t\t\t----PARTITIONS_TYPE	-----\n");
 	// there is: list or single
 	token = get_Token();
 	switch (token.id) {
@@ -771,7 +757,6 @@ ERROR_CODE partition() {
 	occurance = set_zero_counter(occurance);
 	// increment number of partitions or semantic analysys
 	partitions_number++;
-	printf("\t\t\t\t\t----PARTITION	-----\n");
 	ERROR_CODE error = OK;
 	// there is:  <partition
 	if ((error = check(K_PARTITION)) != OK){
@@ -819,9 +804,7 @@ ERROR_CODE partition() {
  * Return: error code or ok
  */
 ERROR_CODE partition_list() {
-	printf("\t\t\t\t\t----PARTITION_LIST	-----\n");
 	ERROR_CODE error = OK;
-
 	token = get_Token();
 	switch (token.id) {
 		// Lexical error
@@ -857,7 +840,6 @@ ERROR_CODE partition_list() {
  * Return: error code or ok
  */
 ERROR_CODE partition_create_config() {
-	printf("\t\t\t\t\t----PARTITION_CREATE_CONFIG	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <create
 	if ((error = check(K_CREATE)) != OK){
@@ -923,7 +905,6 @@ ERROR_CODE partition_create_config() {
  * Return: error code or ok
  */
 ERROR_CODE partition_size() {
-	printf("\t\t\t\t\t----PARTITION_SIZE	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <size 
 	if ((error = check(K_SIZE)) != OK){
@@ -974,7 +955,6 @@ ERROR_CODE partition_size() {
  */
 ERROR_CODE mount() {
 	ERROR_CODE error = OK;
-	printf("\t\t\t\t\t----MOUNT	-----\n");
 	// there is: <mount>
 	if ((error = rPar()) != OK){
 		return error;
@@ -1022,7 +1002,6 @@ ERROR_CODE mount() {
  */
 ERROR_CODE lv_name() {
 	ERROR_CODE error = OK;
-	printf("\t\t\t\t\t----LV_NAME	-----\n");
 	// there is: <lv_name>
 	if ((error = rPar()) != OK){
 		return error;
@@ -1068,7 +1047,6 @@ ERROR_CODE lv_name() {
  */
 ERROR_CODE lvm_group() {
 	ERROR_CODE error = OK;
-	printf("\t\t\t\t\t----LVM_GROUP	-----\n");
 	// there is: <lvm_group>
 	if ((error = rPar()) != OK){
 		return error;
@@ -1211,7 +1189,6 @@ ERROR_CODE partition_id() {
  * Return: error code or ok
  */
 ERROR_CODE partition_nr() {
-	printf("\t\t\t\t\t----PARTITION_NR	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <partition_nr  CONFIG_TYPE
 	if ((error = config_type()) != OK){
@@ -1292,7 +1269,6 @@ ERROR_CODE partition_nr() {
  * Return: error code or ok
  */
 ERROR_CODE partition_atributes() {
-	printf("\t\t\t\t\t----PARTITION_ATRIBUTES	-----\n");
 	ERROR_CODE error = OK;
 	// there is: < or </
 	token = get_Token();
@@ -1403,7 +1379,6 @@ ERROR_CODE partition_atributes() {
  * Return: error code or ok
  */
 ERROR_CODE format() {
-	printf("\t\t\t\t\t----FORMAT	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <format CONFIG_TYPE
 	if ((error = config_type()) != OK){
@@ -1464,7 +1439,6 @@ ERROR_CODE format() {
  * Return: error code or ok
  */
 ERROR_CODE stripes() {
-	printf("\t\t\t\t\t----STRIPES	-----\n");
 	ERROR_CODE error = OK;
 	int tmp_attr_type;
 	// there is: <stripes CONFIG_TYPE
@@ -1554,7 +1528,6 @@ ERROR_CODE stripes() {
  * Return: error code or ok
  */
 ERROR_CODE filesystem() {
-	printf("\t\t\t\t\t----FILESYSTEM	-----\n");
 	ERROR_CODE error = OK;
 	// there is: <filesystem CONFIG_TYPE
 	if ((error = config_type()) != OK){
@@ -1634,133 +1607,3 @@ ERROR_CODE filesystem() {
 	}
 	return OK;
 }
-
-
-const char * debug_token(int token_id){
-	switch(token_id) {
-		case sIdent  :
-		  return "---Identifikator";
-		  break;
-		case sInteger  :
-		  return "---Integer";
-		  break;
-		case sSlash  :
-		  return "---Slash";
-		  break;
-		case sString  :
-		  return "---String";
-		  break;
-		case sBooleanType  :
-		  return "---Boolean";
-		  break;
-		case sAssign  :
-		  return "---Rovna sa";
-		  break;
-		case sColon  :
-		  return "---Dvojbodka";
-		  break;
-		case sRPar  :
-		  return "---Zatvorka prava";
-		  break;
-		case sLStartPar  :
-		  return "---Zatvorka lava";
-		  break;
-		case sLEndPar  :
-		  return "---Zatvorka lava konecna";
-		  break;
-		case sKeyWord  :
-		  return "---Klucove slovo";
-		  break;
-		case K_PARTITIONING  :
-		  return "---KPartitioning";
-		  break;
-		case  K_MOUNT :
-		  return "---K_MOUNT";
-		  break;
-		case   K_TYPE:
-		  return "---K_TYPE";
-		  break;
-		case   K_DRIVE:
-		  return "---K_DRIVE";
-		  break;
-		case   K_DEVICE:
-		  return "---K_DEVICE";
-		  break;
-		case   K_INITIALIZE:
-		  return "---K_INITIALIZE";
-		  break;
-		case   K_CONFIG:
-		  return "---K_CONFIG";
-		  break;
-		case   K_PARTITION:
-		  return "---K_PARTITION";
-		  break;
-		case   K_PARTITIONS:
-		  return "---K_PARTITIONS";
-		  break;
-		 case   K_CREATE:
-		  return "---K_CREATE";
-		  break;
-		case   K_FILESYSTEM:
-		  return "---K_FILESYSTEM";
-		  break;
-		case  K_FORMAT :
-		  return "---K_FORMAT";
-		  break;
-		 case   K_PARTITION_ID:
-		  return "---K_PARTITION_ID";
-		  break;
-		case  K_PARTITION_NR :
-		  return "---K_PARTITION_NR";
-		  break;
-		case   K_SIZE:
-		  return "---K_SIZE";
-		  break;
-		 case  K_STRIPES :
-		  return "---K_STRIPES";
-		  break;
-		case   K_STRIPESSIZE:
-		  return "---K_STRIPESSIZE";
-		  break;
-		case  K_LVM_GROUP :
-		  return "---K_LVM_GROUP";
-		  break;
-		case  K_PESIZE :
-		  return "---K_PESIZE";
-		  break;
-		case K_USE  :
-		  return "---K_USE";
-		  break;
-		case K_ALL  :
-		  return "---K_ALL";
-		  break;
-		case K_NO  :
-		  return "---K_NO";
-		  break;
-		case K_SYMBOL  :
-		  return "---K_SYMBOL";
-		  break;
-		case K_BOOLEAN  :
-		  return "---K_BOOLEAN";
-		  break;
-		case K_LIST  :
-		  return "---K_LIST";
-		  break;
-		case K_SINGLE  :
-		  return "---K_SINGLE";
-		  break;
-		case K_INTEGER  :
-		  return "---K_INTEGER";
-		  break;
-	}
-	
-}
-
-void debug(tToken token) {
-	printf("-----------------\n");
-	printf("%s\n", token.attribute);
-	//printf("%d\n", token.id);
-	printf("%s\n", debug_token(token.id));    
-	printf("Line of code %d\n", token.code_line);
-}
-

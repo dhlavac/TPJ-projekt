@@ -21,7 +21,6 @@ typedef struct{
 
 tError syntax_analysys();
 ERROR_CODE partitioning();
-void debug();
 ERROR_CODE check();
 ERROR_CODE rPar();
 ERROR_CODE lPar();
