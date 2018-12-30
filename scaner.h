@@ -1,3 +1,9 @@
+/*
+ * File: scaner.h 
+ * @author: Dominik Hlavac Duran
+ * Description: Header file for lexical analysys
+ */ 
+
 #ifndef SCANER_INCLUDED
 #define SCANER_INCLUDED
 

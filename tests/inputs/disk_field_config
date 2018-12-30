@@ -1,0 +1,280 @@
+<partitioning>
+	<drive>
+		<device>"/dev/sda"</device>
+		<initialize config:type=boolean>false</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"max"</size>
+				<partition_id config:type=integer>142</partition_id>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+	  			<format config:type=boolean>false</format>
+			</partition>
+		</partitions>
+		<pesize>"34"</pesize>
+		<type config:type=symbol>"CT_LVM"</type>
+		<use>no</use>
+	</drive>
+	<drive>
+		<device>"/boot"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"500MB"</size>
+				<mount>"/boot"</mount>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FTR"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdb"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"10TB"</size>
+				<mount>"/data"</mount>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"XGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdc"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>""</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"XFF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdb2"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdb3"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdb4"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdc2"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdc3"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdc4"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd2"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd3"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd4"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd5"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd6"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd6"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd7"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd8"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd9"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sdd9"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"300GB"</size>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"FGF"</type>
+		<use>all</use>
+	</drive>
+</partitioning>

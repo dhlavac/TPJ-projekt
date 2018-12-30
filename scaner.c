@@ -1,5 +1,6 @@
 /**
  * File:     scaner.c
+ * @author: Dominik Hlavac Duran
  * Lexical analysys
  */
 

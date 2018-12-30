@@ -18,10 +18,16 @@ int main(int argc, char **argv){
 
 	if (argc == 1) {
 		memallfree(); /* call garbage collector to clean up */
-		fprintf(stderr, "No file entered for anlysys.\n");
+		fprintf(stderr, "No file entered for analysys.\n");
+		return NO_FILE_ERR;
+	}
+	if (argc > 2) {
+		memallfree(); /* call garbage collector to clean up */
+		fprintf(stderr, "Too much arguments.\n");
+		return TOO_MUCH_ARG_ERR;
 	}
 	if(!(file = fopen(argv[1], "r"))){
-		fprintf(stderr, "Cannot open file for reading.\n");
+		fprintf(stderr, "Cannot open file '%s' for reading.\n", argv[1]);
 		memallfree(); // free memorry using garbage collector
 		return INTERN_ERR;
 	}
@@ -34,15 +40,15 @@ int main(int argc, char **argv){
 		switch (error.error_code) {
 			// Syntax error
 			case SYN_ERR: 
-				fprintf(stderr, "Syntax error occures on line %d\n",error.current_line);
+				fprintf(stderr, "Syntax error occures on line %d.\n",error.current_line);
 			break;
 			// Lexical error
 			case LEX_ERR: 
-				fprintf(stderr, "Lexical error - unknown character occures on line %d\n",error.current_line);
+				fprintf(stderr, "Lexical error - unknown character occures on line %d.\n",error.current_line);
 			break;
 			// Semantic error
 			case  SEM_ERR:
-				fprintf(stderr, "Semantic error occures on line %d\n",error.current_line);
+				fprintf(stderr, "Semantic error occures on line %d.\n",error.current_line);
 			break;
 			// Semantic error with multiple definition
 			case  SEM_DOUBLE_DEF_ERR:

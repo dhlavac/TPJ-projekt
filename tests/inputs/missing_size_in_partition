@@ -1,0 +1,16 @@
+<partitioning>
+	<drive>
+		<device>"/dev/sda"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<mount>"/boot"</mount>
+				<lvm_group>"vg00"</lvm_group>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"nieco ine"</type>
+		<use>all</use>
+	</drive>
+</partitioning>

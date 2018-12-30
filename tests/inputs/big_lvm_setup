@@ -1,0 +1,283 @@
+<partitioning>
+	<drive>
+		<device>"/dev/sda"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=list>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"4G"</size>
+				<partition_id config:type=integer>142</partition_id>
+				<lvm_group>"vg00"</lvm_group>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"1"</lv_name>
+				<lvm_group>"vg00"</lvm_group>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"r2"</lv_name>
+				<lvm_group>"vg00"</lvm_group>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"3"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"4"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"5"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"6"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"7"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"8"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"9"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"10"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"11"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"12"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"13"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"14"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"15"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"2G"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"BIG_LVM"</type>
+		<use>all</use>
+	</drive>
+</partitioning>

@@ -1,7 +1,9 @@
 /*
  * File: garbage.h 
+ * @author: Dominik Hlavac Duran
  * Description: Header file of garbage collector
  */ 
+
 #ifndef GARBAGE_INCLUDED
 #define GARBAGE_INCLUDED
 
@@ -13,7 +15,6 @@
 #include "error.h"
  
 #define MMU_SIZE 32
-
 
 typedef enum typeofitem{
     mem_memory,

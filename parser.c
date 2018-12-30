@@ -1,6 +1,7 @@
 /*
  * File: parser.c 
  * Description: Implementation of recursive syntax analysys
+ * @author: Dominik Hlavac Duran
  */
 
 #include "parser.h"

@@ -1,0 +1,64 @@
+<partitioning>
+	<drive>
+		<device>"/dev/sda"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=list>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"max"</size>
+				<mount>"/boot"</mount>
+				<stripes config:type=integer>1</stripes>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"4G"</size>
+				<partition_id config:type=integer>142</partition_id>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lvm_group>"vg00"</lvm_group>
+			</partition>
+			<partition>
+				<create config:type=boolean>true</create>
+				<size>"min"</size>
+				<partition_nr config:type=integer>2</partition_nr>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+			  	<format config:type=boolean>true</format>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"HIGH_DATA"</type>
+		<use>all</use>
+	</drive>
+	<drive>
+		<device>"/dev/sda"</device>
+		<initialize config:type=boolean>false</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"max"</size>
+				<partition_id config:type=integer>142</partition_id>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+	  			<format config:type=boolean>false</format>
+			</partition>
+		</partitions>
+		<pesize>"UXC"</pesize>
+		<type config:type=symbol>"CT_LVM"</type>
+		<use>no</use>
+	</drive>
+	<drive>
+		<device>"/dev/sda"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>""</size>
+				<mount>"/boot"</mount>
+				<lvm_group>"vg00"</lvm_group>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"EXTERNAL"</type>
+		<use>all</use>
+	</drive>
+</partitioning>

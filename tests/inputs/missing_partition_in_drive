@@ -1,0 +1,11 @@
+<partitioning>
+	<drive>
+		<device>"/dev/sda"</device>
+		<initialize config:type=boolean>false</initialize>
+		<partitions config:type=single>
+		</partitions>
+		<pesize>"nieco"</pesize>
+		<type config:type=symbol>"CT_LVM"</type>
+		<use>no</use>
+	</drive>
+</partitioning>

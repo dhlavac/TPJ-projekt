@@ -1,6 +1,8 @@
 /*
- * File: garbage.c 
+ * File: garbage.c
+ * @author: Dominik Hlavac Duran
  * Description: Modification of functions for alocation and dealocation of memory 
+ * functions track used memorry and save pointers for unallocation memory - dummy implementation inspired by C++ garbage collector
  */
 
 #include "garbage.h"
@@ -36,8 +38,6 @@ void* memmalloc(size_t size) {
 	}
 
     gmemtableitem* item = memfindout(memtable.table, (intptr_t)tmpptr);
-
-
     item->ptr = tmpptr;
     item->allocated = size;
     item->type = mem_memory;
@@ -65,8 +65,6 @@ void* memrealloc(void* ptr, size_t size){
     }
 
     item = memfindout(memtable.table, (intptr_t)tmpptr);
-
-
     item->ptr = tmpptr;
     item->allocated = size;
     item->type = mem_memory;
@@ -77,7 +75,6 @@ void* memrealloc(void* ptr, size_t size){
 void* memcalloc(size_t num, size_t size){
     memtable.callocs++;
     memtable.allocated = memtable.allocated + size;
-
     void* tmpptr = calloc(num, size);
 
     if (tmpptr == NULL) {
@@ -86,7 +83,6 @@ void* memcalloc(size_t num, size_t size){
     }
 
     gmemtableitem* item = memfindout(memtable.table, (intptr_t)tmpptr);
-
     item->ptr = tmpptr;
     item->allocated = size;
     item->type = mem_memory;
@@ -100,11 +96,11 @@ void* memfopen(const char* filename, const char* mode){
 
     void* tmpptr = (FILE*)fopen(filename, mode);
 
-    if(!tmpptr)
+    if(!tmpptr){
         return NULL;
+    }
 
     gmemtableitem* item = memfindout(memtable.table, (intptr_t)tmpptr);
-
     item->ptr = tmpptr;
     item->allocated = sizeof(FILE*);
     item->type = mem_file;
@@ -115,13 +111,15 @@ void* memfopen(const char* filename, const char* mode){
 void memfree(void* ptr){
     memtable.frees++;
 
-    if(!ptr)
+    if(!ptr){
         return;
+    }
 
     gmemtableitem* item = memfindout(memtable.table, (intptr_t)ptr);
 
-    if(!item)
+    if(!item){
         return;
+    }
 
     if(item->allocated != 0){
         free(ptr);
@@ -154,10 +152,8 @@ void memfclose(void* ptr){
 void memallfree(){
     if(!memtable.table && !memtable.table->data)
         return;
-
     gmemtableitemptr head = NULL;
     gmemtableitemptr item = NULL;
-
 
     for(unsigned int i = 0; i < memtable.table->size; i++){
         if(memtable.table->data[i] != 0){
@@ -174,18 +170,14 @@ void memallfree(){
                 }
 
                 memtitemdestroy(item);
-
                 memtable.table->data[i] = head;
             }
-
             memtable.table->data[i] = NULL;
         }
     }
 
     memtabledispose(memtable.table);
-
     memtdestroy(memtable.table);
-
     memtable.table = NULL;
 }
     
@@ -196,59 +188,58 @@ gmemtable* memorytablecreate(){
 gmemtableitem* memtitemcreate(intptr_t key){
     gmemtableitem* item = (gmemtableitem*)malloc(sizeof(gmemtableitem));
 
-    if(!item)
+    if(!item){
         return NULL;
+    }
 
     item->ptr = NULL;
     item->next = NULL;
     item->key = key;
     item->type = mem_notdefined;
-
     return item;
 }
 
 void memtdestroy(gmemtable* T){
-    if(!T)
+    if(!T){
         return;
-
+    }
     free(T);
 }
 
 void memtitemdestroy(gmemtableitem* item){
-    if(!item)
+    if(!item){
         return;
-
+    }
     free(item);
 }
 
 void memtableinicialization(gmemtable* T, size_t size){
-    if(!T)
+    if(!T){
         return;
-
+    }
     T->data = calloc(size, sizeof(gmemtableitemptr));
-
-    if(!T->data)
+    if(!T->data){
         return;
-
+    }
     T->size = size;
 }
 
 void memtabledispose(gmemtable* T){
-    if(!T)
+    if(!T){
         return;
-
-    if(T->data)
+    }
+    if(T->data){
         free(T->data);
-
+    }
     T->data = NULL;
 }
 
 gmemtableitem* memfindout(gmemtable* T, intptr_t key){
-    if(!T)
+    if(!T){
         return NULL;
+    }
 
     size_t index = hash(key, T->size);
-
     gmemtableitem* item = T->data[index];
 
     if(!item){
@@ -258,12 +249,12 @@ gmemtableitem* memfindout(gmemtable* T, intptr_t key){
     }
 
     while(item){
-        if(item->key == key)
+        if(item->key == key){
             return item;
-
-        if(!item->next)
+        }
+        if(!item->next){
             break;
-
+        }
         item = item->next;
     };
 

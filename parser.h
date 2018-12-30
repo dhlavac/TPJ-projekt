@@ -1,3 +1,8 @@
+/*
+ * File: parser.h 
+ * @author: Dominik Hlavac Duran
+ * Description: Header file for syntax analysys
+ */ 
 
 #ifndef PARSER_INCLUDED
 #define PARSER_INCLUDED

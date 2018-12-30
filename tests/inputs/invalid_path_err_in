@@ -1,0 +1,34 @@
+<partitioning>
+	<drive>
+		<device>"dev"</device>
+		<initialize config:type=boolean>false</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>"max"</size>
+				<partition_id config:type=integer>142</partition_id>
+				<lv_name>"root"</lv_name>
+				<filesystem config:type=symbol>"ext3"</filesystem>
+	  			<format config:type=boolean>false</format>
+			</partition>
+		</partitions>
+		<pesize>"34"</pesize>
+		<type config:type=symbol>"CT_LVM"</type>
+		<use>no</use>
+	</drive>
+	<drive>
+		<device>"/dev/sda"</device>
+		<initialize config:type=boolean>true</initialize>
+		<partitions config:type=single>
+			<partition>
+				<create config:type=boolean>false</create>
+				<size>""</size>
+				<mount>"/boot"</mount>
+				<lvm_group>"vg00"</lvm_group>
+			</partition>
+		</partitions>
+		<pesize></pesize>
+		<type config:type=symbol>"XGF"</type>
+		<use>all</use>
+	</drive>
+</partitioning>
