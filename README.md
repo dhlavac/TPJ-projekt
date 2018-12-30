@@ -1,10 +1,10 @@
 # TPJ-projekt
-##Project for subject TPJ 
+## Project for subject TPJ 
 
 Project validating syntax,semantic and lexical errors in configuration files used by project Foreman. 
 Configuration files are used for configuration of drives and volumes in clusters or servers using Remote Execution tool in Foreman.
 
-##Instructions
+## Instructions
 
 For building project use Makefile - command make
 
